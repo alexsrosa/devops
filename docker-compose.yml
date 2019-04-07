@@ -1,0 +1,41 @@
+version: '3.3'
+services:
+  jenkins:
+    image: "jenkins/jenkins"
+    container_name: "jenkins"
+    hostname: "jenkins"
+    ports: 
+      - "8099:8080"
+      - "50000:50000"
+    volumes: 
+      - './volumes/jenkins/home:/var/jenkins_home'
+    networks:
+      - doc-network
+  portainer: 
+    image: "portainer/portainer"
+    container_name: "portainer"
+    hostname: "portainer"
+    ports:
+      - "9001:9000"
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - './volumes/portainer/data:/data'
+    networks:
+      - doc-network
+  sonarqube:
+    image: "sonarqube"
+    image: "sonarqube:latest"
+    container_name: "sonarqube"
+    hostname: "sonarqube"
+    ports: 
+      - "9000:9000"
+    volumes: 
+      - './volumes/sonarqube/conf:/opt/sonarqube/conf'
+      - './volumes/sonarqube/data:/opt/sonarqube/data'
+      - './volumes/sonarqube/logs:/opt/sonarqube/logs'
+      - './volumes/sonarqube/extensions:/opt/sonarqube/extensions'
+    networks:
+      - doc-network
+networks:
+  doc-network:
+    driver: bridge
